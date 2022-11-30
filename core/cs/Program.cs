@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
+using AoC22.Utility;
 
 namespace AoC22.Core;
 
@@ -61,14 +63,22 @@ internal static partial class Program
 	[GeneratedRegex("([0-9]+)$")]
 	private static partial Regex MyRegex();
 
-    private static string GetResultString(CombinedSolutionResult result) =>
-		(result.Part1.Kind, result.Part2.Kind) switch
-		{
-			(SolutionKind.None, SolutionKind.None) => "",
-			(_, SolutionKind.None) => GetResultString(result.Part1),
-			(SolutionKind.None, _) => "\n" + GetResultString(result.Part2),
-			_ => $"{GetResultString(result.Part1)}\n{GetResultString(result.Part2)}"
-		};
+    private static string GetResultString(CombinedSolutionResult result)
+    {
+        StringBuilder builder = new();
+
+        if (result.Part1.Kind != SolutionKind.None)
+        {
+            builder.AppendLine(GetResultString(result.Part1));
+        }
+
+        if (result.Part2.Kind != SolutionKind.None)
+        {
+            builder.AppendLine(GetResultString(result.Part2));
+        }
+
+        return builder.ToString();
+    }
 
     private static string GetResultString(SolutionResult result) => result.Kind switch
     {
