@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text;
 using AoC22.Utility;
 
 namespace AoC22.Core;
@@ -23,16 +21,10 @@ internal static partial class Program
 			return;
         }
 
-        if (!int.TryParse(args[0], out var day))
+        if (!int.TryParse(args[0], out var day) ||
+			!Days.Solutions.TryGetValue(day, out var solverFactory))
         {
-            Console.WriteLine($"Could not parse '{args[0]}' to a day.");
-            return;
-        }
-        
-        var days = GetDays();
-        if (!days.TryGetValue(day, out var solverType))
-        {
-            Console.WriteLine($"Could not find a solver for day {day}.");
+            Console.WriteLine($"Unknown day {args[0]}");
             return;
         }
 
@@ -41,27 +33,12 @@ internal static partial class Program
 		{
 			input = File.ReadAllText(input);
 		}
-
-        var solver = (CombinedSolution)Activator.CreateInstance(solverType)!;
         
+		var solver = solverFactory();
         var result = solver.Solve(input);
 
         Console.WriteLine(GetResultString(result));
     }
-
-	private static IReadOnlyDictionary<int, Type> GetDays() =>
-        Assembly.GetExecutingAssembly()
-			.GetTypes()
-			.Where(type => type.Namespace == "AoC22.Solutions")
-			.Where(type => type.IsAssignableTo(typeof(CombinedSolution)))
-			.ToDictionary(type =>
-			{
-				var match = MyRegex().Match(type.Name);
-				return int.Parse(match.Value);
-			});
-
-	[GeneratedRegex("([0-9]+)$")]
-	private static partial Regex MyRegex();
 
     private static string GetResultString(CombinedSolutionResult result)
     {

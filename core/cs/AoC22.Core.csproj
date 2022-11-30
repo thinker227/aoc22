@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\utility\cs\AoC22.Utility.csproj" />
+    <ProjectReference Include="..\..\solutions\AoC22.Solutions.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -85,30 +85,8 @@ public abstract class CombinedSolution
 /// </summary>
 public abstract class SeparateSolution : CombinedSolution
 {
-	public override CombinedSolutionResult Solve(string input)
-	{
-		SolutionResult part1;
-		try
-		{
-			part1 = Part1(input);
-		}
-		catch (NotImplementedException)
-		{
-			return new();
-		}
-
-		SolutionResult part2;
-		try
-		{
-			part2 = Part2(input);
-		}
-		catch (NotImplementedException)
-		{
-			return new(part1, default);
-		}
-
-		return new(part1, part2);
-	}
+	public sealed override CombinedSolutionResult Solve(string input) =>
+		new(Part1(input), Part2(input));
 
 	/// <summary>
 	/// Solves part 1.
@@ -120,5 +98,6 @@ public abstract class SeparateSolution : CombinedSolution
 	/// Solves part 2.
 	/// </summary>
 	/// <param name="input">The input to the solution.</param>
-	public abstract SolutionResult Part2(string input);
+	public virtual SolutionResult Part2(string input) =>
+		default;
 }
