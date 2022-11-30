@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace AoC22.Core;
+namespace AoC22.Utility;
 
 /// <summary>
 /// The result of an individual part of a solution.
