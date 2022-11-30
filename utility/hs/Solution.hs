@@ -1,8 +1,15 @@
 module Solution where
 
-data Solution
-    = Separate { part1 :: String -> Integer, part2 :: String -> Integer }
-    | Combined { solve :: String -> (Integer, Integer) }
+type Answer = String
 
-runSolution (Separate part1 part2) input = (part1 input, part2 input)
-runSolution (Combined solve) input = solve input
+data Solution
+    = Single { part1 :: String -> Answer }
+    | Separate { part1 :: String -> Answer, part2 :: String -> Answer }
+    | Combined { solve :: String -> (Answer, Answer) }
+
+runSolution :: Solution -> String -> (Answer, Maybe Answer)
+runSolution (Single part1) input = (part1 input, Nothing)
+runSolution (Separate part1 part2) input = (part1 input, Just $ part2 input)
+runSolution (Combined solve) input =
+    let (p1, p2) = solve input in
+    (p1, Just p2)
