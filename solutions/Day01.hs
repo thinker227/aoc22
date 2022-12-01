@@ -12,8 +12,8 @@ day01 = Combined solve
 solve :: String -> (Answer, Answer)
 solve input =
     let cals = totalCalories input in (
-        show $ head cals,
-        show $ sum $ take 3 cals)
+        show $ head cals,         -- Part 1
+        show $ sum $ take 3 cals) -- Part 2
 
 totalCalories :: String -> [Int]
 totalCalories input =
