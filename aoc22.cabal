@@ -25,6 +25,7 @@ library utility
 	    Solution
         ListUtils
         StringUtils
+        NumUtils
 
     build-depends:    base ^>=4.14.3.0
     hs-source-dirs:   utility/hs

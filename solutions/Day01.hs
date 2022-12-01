@@ -3,6 +3,7 @@ module Day01 (day01) where
 import Solution (Solution(Separate), Answer)
 import ListUtils (splitBy)
 import StringUtils (blank)
+import NumUtils (readNum)
 import Data.List (sort)
 
 day01 :: Solution
@@ -21,7 +22,8 @@ part2 input = show
     $ sort
     $ totalCalories input
 
+totalCalories :: String -> [Int]
 totalCalories input =
-      map (sum . (map read :: [String] -> [Int]))
+      map (sum . map readNum)
     $ splitBy blank
     $ splitBy (== '\n') input
