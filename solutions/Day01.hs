@@ -1,24 +1,19 @@
 module Day01 (day01) where
 
-import Solution (Solution(Separate), Answer)
+import Solution (Solution(Combined), Answer)
 import ListUtils (splitBy)
 import StringUtils (blank)
 import NumUtils (readNum)
 import Data.List (sort)
 
 day01 :: Solution
-day01 = Separate part1 part2
+day01 = Combined solve
 
-part1 :: String -> Answer
-part1 input = show
-    $ head
-    $ totalCalories input
-
-part2 :: String -> Answer
-part2 input = show
-    $ sum
-    $ take 3
-    $ totalCalories input
+solve :: String -> (Answer, Answer)
+solve input =
+    let cals = totalCalories input in (
+        show $ head cals,
+        show $ sum $ take 3 cals)
 
 totalCalories :: String -> [Int]
 totalCalories input =
