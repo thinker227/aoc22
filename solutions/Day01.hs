@@ -11,19 +11,19 @@ day01 = Separate part1 part2
 
 part1 :: String -> Answer
 part1 input = show
-    $ maximum
+    $ head
     $ totalCalories input
 
 part2 :: String -> Answer
 part2 input = show
     $ sum
     $ take 3
-    $ reverse
-    $ sort
     $ totalCalories input
 
 totalCalories :: String -> [Int]
 totalCalories input =
-      map (sum . map readNum)
+      reverse
+    $ sort
+    $ map (sum . map readNum)
     $ splitBy blank
     $ splitBy (== '\n') input
