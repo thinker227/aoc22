@@ -26,4 +26,4 @@ totalCalories input =
     $ sort
     $ map (sum . map readNum)
     $ splitBy blank
-    $ splitBy (== '\n') input
+    $ lines input
