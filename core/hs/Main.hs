@@ -1,6 +1,7 @@
 module Main where
 
 import Solution (Solution (Single, Separate, Combined), runSolution, Answer)
+import Day01 (day01)
 import Data.Map ( (!?), fromList, Map )
 import System.Environment (getArgs)
 import Text.Read (readMaybe)
@@ -8,8 +9,7 @@ import System.Directory ( doesFileExist )
 
 days :: Map Int Solution
 days = fromList
-    [ (-1, Single id),
-      (0, Combined (const ("Test part 1", "Test part 2")))
+    [ (1, day01)
     ]
 
 getDaySolution :: String -> Maybe Solution

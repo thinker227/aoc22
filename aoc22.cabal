@@ -6,7 +6,7 @@ author:             thinker227
 
 library solutions
     exposed-modules:
-        
+        Day01
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -23,6 +23,8 @@ library solutions
 library utility
     exposed-modules:
 	    Solution
+        ListUtils
+        StringUtils
 
     build-depends:    base ^>=4.14.3.0
     hs-source-dirs:   utility/hs
