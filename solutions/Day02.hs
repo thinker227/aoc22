@@ -40,11 +40,14 @@ p2Strat _ = error "Malformed input"
 
 -- | Gets what shape to pick based on a character and the opponent's shape.
 whatToPick :: Char -> Shape -> Shape
+-- Loose
 whatToPick 'X' opponent = case opponent of
     Rock -> Scissors
     Paper -> Rock
     Scissors -> Paper
+-- Draw
 whatToPick 'Y' opponent = opponent
+-- Win
 whatToPick 'Z' opponent = case opponent of
     Rock -> Paper
     Paper -> Scissors
