@@ -4,20 +4,15 @@ import Solution (Solution (Separate), Answer)
 import GHC.Stack (HasCallStack)
 
 day02 :: Solution
-day02 = Separate part1 part2
+day02 = Separate (solve p1Strat) (solve p2Strat)
 
-part1 :: String -> Answer
-part1 input = show
+solve :: (String -> (Shape, Shape)) -> String -> Answer
+solve strategy input = show
     $ sum
-    $ map (getScore . getStrategy)
+    $ map (getScore . strategy)
     $ lines input
 
-part2 :: String -> Answer
-part2 input = show
-    $ sum
-    $ map (getScore . getBetterStrategy)
-    $ lines input
-
+-- | Gets the score of a game (player shape, opponent shape).
 getScore :: (Shape, Shape) -> Int
 getScore (Rock, s) = 1 + case s of
     Rock -> 3
@@ -32,16 +27,19 @@ getScore (Scissors, s) = 3 + case s of
    Paper -> 6
    Scissors -> 3
 
-getStrategy :: String -> (Shape, Shape)
-getStrategy (b : ' ' : a : _) = (charToShape a, charToShape b)
-getStrategy _ = error "Malformed input"
+-- | Parse into a tuple (player shape, opponent shape).
+p1Strat :: String -> (Shape, Shape)
+p1Strat (b : ' ' : a : _) = (charToShape a, charToShape b)
+p1Strat _ = error "Malformed input"
 
-getBetterStrategy :: String -> (Shape, Shape)
-getBetterStrategy (b : ' ' : a : _) = (whatToPick a opponent, opponent)
+-- | Parse into a tuple (shape to win\/draw\/loose against opponent, opponent shape).
+p2Strat :: String -> (Shape, Shape)
+p2Strat (b : ' ' : a : _) = (whatToPick a opponent, opponent)
     where opponent = charToShape b
-getBetterStrategy _ = error "Malformed input"
+p2Strat _ = error "Malformed input"
 
-whatToPick :: Char -> Shape-> Shape
+-- | Gets what shape to pick based on a character and the opponent's shape.
+whatToPick :: Char -> Shape -> Shape
 whatToPick 'X' opponent = case opponent of
     Rock -> Scissors
     Paper -> Rock
