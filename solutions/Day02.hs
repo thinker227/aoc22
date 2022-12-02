@@ -10,22 +10,22 @@ part1 input = show
     $ map (getScore . getStrategy)
     $ lines input
 
-getScore :: (Move, Move) -> Int
+getScore :: (Shape, Shape) -> Int 
 
-getStrategy :: String -> (Move, Move)
-getStrategy (opponent : ' ' : you : _) = (charToMove opponent, charToMove you)
+getStrategy :: String -> (Shape, Shape)
+getStrategy (opponent : ' ' : you : _) = (charToShape opponent, charToShape you)
 getStrategy _ = error "Malformed input"
 
-charToMove :: Char -> Move
-charToMove 'A' = Rock
-charToMove 'B' = Paper
-charToMove 'C' = Scissors
-charToMove 'X' = Rock
-charToMove 'Y' = Paper
-charToMove 'Z' = Scissors
-charToMove _ = error "Malformed input"
+charToShape :: Char -> Shape
+charToShape 'A' = Rock
+charToShape 'B' = Paper
+charToShape 'C' = Scissors
+charToShape 'X' = Rock
+charToShape 'Y' = Paper
+charToShape 'Z' = Scissors
+charToShape _ = error "Malformed input"
 
-data Move
+data Shape
     = Rock
     | Paper
     | Scissors
