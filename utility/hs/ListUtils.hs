@@ -1,4 +1,6 @@
-module ListUtils (splitBy, splitHalf, chunk) where
+module ListUtils (splitBy, splitHalf, chunk, intersectAll) where
+
+import Data.List (intersect)
 
 splitBy :: (a -> Bool) -> [a] -> [[a]]
 splitBy f xs = splitBy' f xs [] []
@@ -15,3 +17,8 @@ splitHalf xs = splitAt (length xs `div` 2) xs
 chunk :: Int -> [a] -> [[a]]
 chunk _ [] = []
 chunk len xs = take len xs : chunk len (drop len xs)
+
+intersectAll :: Eq a => [[a]] -> [a]
+intersectAll (a:b:xs) = a `intersect` intersectAll (b:xs)
+intersectAll [x] = x
+intersectAll [] = []

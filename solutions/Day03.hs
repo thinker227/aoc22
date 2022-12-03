@@ -1,7 +1,7 @@
 module Day03 (day03) where
 
 import Solution (Solution (Separate, Single), Answer)
-import ListUtils (splitHalf, chunk)
+import ListUtils (splitHalf, chunk, intersectAll)
 import Data.List (intersect, nub)
 import Data.Char (ord)
 
@@ -9,7 +9,7 @@ day03 = Separate
     -- Take all lines, split them in half, then intersect the halves
     (solve id (uncurry intersect . splitHalf))
     -- Chunk all lines by 3, then intersect them
-    (solve (chunk 3) (\[a, b, c] -> intersect c $ intersect a b))
+    (solve (chunk 3) intersectAll)
 
 solve fa fb input = show
     $ sum
