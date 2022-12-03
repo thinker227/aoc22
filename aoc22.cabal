@@ -8,6 +8,7 @@ library solutions
     exposed-modules:
         Day01
         Day02
+        Day03
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -24,7 +25,7 @@ library solutions
 
 library utility
     exposed-modules:
-	    Solution
+        Solution
         ListUtils
         StringUtils
         NumUtils
