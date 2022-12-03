@@ -20,4 +20,4 @@ solve fa fb input = show
 priority c = let n = ord c in
     if c `elem` ['a'..'z']
     then n - ord 'a' + 1
-    else (n - ord 'A') + 27
+    else n - ord 'A' + 27
