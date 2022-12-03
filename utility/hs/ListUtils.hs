@@ -1,4 +1,4 @@
-module ListUtils (splitBy, splitHalf) where
+module ListUtils (splitBy, splitHalf, chunk) where
 
 splitBy :: (a -> Bool) -> [a] -> [[a]]
 splitBy f xs = splitBy' f xs [] []
@@ -11,3 +11,7 @@ splitBy' _ _ l accum = l ++ [accum]
 
 splitHalf :: [a] -> ([a], [a])
 splitHalf xs = splitAt (length xs `div` 2) xs
+
+chunk :: Int -> [a] -> [[a]]
+chunk _ [] = []
+chunk len xs = take len xs : chunk len (drop len xs)
