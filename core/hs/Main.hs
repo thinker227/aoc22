@@ -4,6 +4,7 @@ import Solution (Solution (Single, Separate, Combined), runSolution, Answer)
 import Day01 (day01)
 import Day02 (day02)
 import Day03 (day03)
+import Day04 (day04)
 import Data.Map ( (!?), fromList, Map )
 import System.Environment (getArgs)
 import Text.Read (readMaybe)
@@ -13,7 +14,8 @@ days :: Map Int Solution
 days = fromList
     [ (1, day01),
       (2, day02),
-      (3, day03)
+      (3, day03),
+      (4, day04)
     ]
 
 getDaySolution :: String -> Maybe Solution
