@@ -10,6 +10,7 @@ library solutions
         Day02
         Day03
         Day04
+        Day05
 
     -- Modules included in this library but not exported.
     -- other-modules:
