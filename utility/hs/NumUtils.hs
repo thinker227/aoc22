@@ -1,4 +1,7 @@
-module NumUtils where
+module NumUtils (
+    readNum,
+    readNumToEnd
+) where
 
 import Data.Char (isNumber)
 
