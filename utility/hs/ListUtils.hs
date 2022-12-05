@@ -2,7 +2,9 @@ module ListUtils (
     splitBy,
     splitHalf,
     chunk,
-    intersectAll
+    intersectAll,
+    modifyAt,
+    setAt
 ) where
 
 import Data.List (intersect)
@@ -35,3 +37,15 @@ intersectAll :: Eq a => [[a]] -> [a]
 intersectAll (a:b:xs) = a `intersect` intersectAll (b:xs)
 intersectAll [x] = x
 intersectAll [] = []
+
+-- | Returns a list with the element at a specified index
+-- applied to a function.
+modifyAt :: Int -> (a -> a) -> [a] -> [a]
+modifyAt pos f xs = let
+    (a,b) = splitAt pos xs
+    in a ++ f (head b) : tail b
+
+-- | Returns a list with the element at a specified index
+-- replaced with a new value.
+setAt :: Int -> a -> [a] -> [a]
+setAt pos x = modifyAt pos (const x)
