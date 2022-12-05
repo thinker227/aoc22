@@ -1,23 +1,31 @@
 module Day05 where
 import Solution (Solution (Single), Answer)
+import StringUtils (blank)
+import NumUtils (readNumToEnd)
 import ListUtils (splitBy)
 import Data.List (elemIndex)
-import StringUtils (blank)
 
 day05 :: Solution
 day05 = Single part1
 
+type Crate = Char
+type CrateStack = [Crate]
+data Instruction = Instruction {
+    amount :: Int,
+    from :: Int,
+    to :: Int }
+    deriving (Eq, Show)
+
 part1 :: String -> Answer
 part1 input = let
     ls = lines input
-    [crates', instructions] = splitBy blank ls
-    width = crateWidth $ head crates'
+    [crates', instructions'] = splitBy blank ls
     stacks = parseCrates $ init crates'
-    in "\nStacks: " ++ show stacks
+    width = length stacks
+    instructions = map parseInstruction instructions'
+    in "\nStacks: " ++ show stacks ++ "\nInstructions: " ++ show instructions
 
-crateWidth :: String -> Int
-crateWidth str = (length str + 1) `div` 4
-
+parseCrates :: [String] -> [CrateStack]
 parseCrates [] = []
 parseCrates xs = let
     (stack, rest) = parseCrateStack xs
@@ -32,5 +40,12 @@ parseCrateStack xs = let
         $ map ((\[_,c,_] -> c) . take 3) xs
     in (crates, map (drop 4) xs)
 
-type Crate = Char
-type CrateStack = [Crate]
+parseInstruction :: String -> Instruction
+parseInstruction str = let
+    -- "move (amount)"
+    (amount, str') = readNumToEnd $ drop 5 str
+    -- " from (from)"
+    (from, str'') = readNumToEnd $ drop 6 str'
+    -- " to (to)"
+    (to, _) = readNumToEnd $ drop 4 str''
+    in Instruction amount from to
