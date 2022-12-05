@@ -1,12 +1,16 @@
 module Day05 where
-import Solution (Solution (Single), Answer)
+import Solution (Solution (Separate), Answer)
 import StringUtils (blank)
 import NumUtils (readNumToEnd)
 import ListUtils (splitBy, setAt)
 import Data.List (elemIndex)
 
 day05 :: Solution
-day05 = Single part1
+day05 = Separate
+    -- Only difference between part 1 and 2 is
+    -- the movement transform
+    (solve reverse)
+    (solve id)
 
 type Crate = Char
 type CrateStack = [Crate]
@@ -16,8 +20,8 @@ data Instruction = Instruction {
     to :: Int }
     deriving (Eq, Show)
 
-part1 :: String -> Answer
-part1 input = let
+solve :: (CrateStack -> CrateStack) -> String -> Answer
+solve moveTransform input = let
     ls = lines input
     [crates', instructions'] = splitBy blank ls
     stacks = parseCrates $ init crates'
@@ -25,7 +29,7 @@ part1 input = let
     instructions = map parseInstruction instructions'
     in show
         $ map head
-        $ rearrange stacks instructions
+        $ rearrange moveTransform stacks instructions
 
 parseCrates :: [String] -> [CrateStack]
 parseCrates [] = []
@@ -54,15 +58,15 @@ parseInstruction str = let
     in Instruction amount from to
 
 -- Could also use State here
-rearrange :: [CrateStack] -> [Instruction] -> [CrateStack]
-rearrange = foldl applyInstruction
+rearrange :: (CrateStack -> CrateStack) -> [CrateStack] -> [Instruction] -> [CrateStack]
+rearrange moveTransform = foldl (applyInstruction moveTransform)
 
-applyInstruction :: [CrateStack] -> Instruction -> [CrateStack]
-applyInstruction stacks (Instruction amount from to) = let
+applyInstruction :: (CrateStack -> CrateStack) -> [CrateStack] -> Instruction -> [CrateStack]
+applyInstruction moveTransform stacks (Instruction amount from to) = let
     -- The from and to values are 1-indexed
     fromStack = stacks !! (from - 1)
     toStack = stacks !! (to - 1)
     selection = take amount fromStack
     newFromStack = drop amount fromStack
-    newToStack = reverse selection ++ toStack
+    newToStack = moveTransform selection ++ toStack
     in setAt (from - 1) newFromStack $ setAt (to - 1) newToStack stacks
