@@ -1,9 +1,9 @@
-module Day05 where
+module Day05 (day05) where
+
 import Solution (Solution (Separate), Answer)
 import StringUtils (blank)
 import NumUtils (readNumToEnd)
 import ListUtils (splitBy, setAt)
-import Data.List (elemIndex)
 
 day05 :: Solution
 day05 = Separate
@@ -27,9 +27,8 @@ solve moveTransform input = let
     stacks = parseCrates $ init crates'
     width = length stacks
     instructions = map parseInstruction instructions'
-    in show
-        $ map head
-        $ rearrange moveTransform stacks instructions
+    in   map head
+       $ rearrange moveTransform stacks instructions
 
 parseCrates :: [String] -> [CrateStack]
 parseCrates [] = []
