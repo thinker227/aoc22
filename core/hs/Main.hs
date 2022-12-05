@@ -1,24 +1,11 @@
 module Main where
 
 import Solution (Solution (Single, Separate, Combined), runSolution, Answer)
-import Day01 (day01)
-import Day02 (day02)
-import Day03 (day03)
-import Day04 (day04)
-import Day05 (day05)
+import Days (days)
 import Data.Map ( (!?), fromList, Map )
 import System.Environment (getArgs)
 import Text.Read (readMaybe)
 import System.Directory ( doesFileExist )
-
-days :: Map Int Solution
-days = fromList
-    [ (1, day01),
-      (2, day02),
-      (3, day03),
-      (4, day04),
-      (5, day05)
-    ]
 
 getDaySolution :: String -> Maybe Solution
 getDaySolution day = do

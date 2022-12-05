@@ -6,14 +6,15 @@ author:             thinker227
 
 library solutions
     exposed-modules:
+        Days
+
+    -- Modules included in this library but not exported.
+    other-modules:
         Day01
         Day02
         Day03
         Day04
         Day05
-
-    -- Modules included in this library but not exported.
-    -- other-modules:
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
