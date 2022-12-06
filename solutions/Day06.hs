@@ -8,11 +8,9 @@ day06 = Separate
     (solve 14)
 
 solve count input = show
-    $ markerPos count
-    $ zip input [0..length input]
-
-markerPos count xs =
-    let es = take count $ map fst xs
-    in if nub es == es
-        then snd (head xs) + count
-        else markerPos count $ tail xs
+    $ (+ count)
+    $ head
+    $ filter (\x ->
+        let es = take count $ drop x input
+        in nub es == es)
+      [0..length input]
