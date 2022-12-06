@@ -1,4 +1,5 @@
-module Day06 where
+module Day06 (day06) where
+
 import Solution (Solution (Separate))
 import Data.List (nub)
 
