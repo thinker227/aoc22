@@ -10,8 +10,8 @@ part1 input = show
     $ markerPos
     $ zip input [0..length input]
 
-markerPos :: [(Char, Int)] -> (Char, Int)
 markerPos xs =
-    if nub (map fst $ take 4 xs) == map fst xs
-    then head xs
-    else markerPos $ tail xs
+    let es = take 4 $ map fst xs
+    in if nub es == es
+        then snd (head xs) + 4
+        else markerPos $ tail xs
