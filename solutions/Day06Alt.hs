@@ -11,4 +11,4 @@ solve count input = show
     $ (+ count)
     $ head
     $ filter (\x -> length (nub $ take count $ drop x input) == count)
-      [0..length input]
+      [0 .. length input]

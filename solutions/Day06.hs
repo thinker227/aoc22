@@ -13,4 +13,4 @@ solve count input = show
     $ filter (\x ->
         let es = take count $ drop x input
         in nub es == es)
-      [0..length input]
+      [0 .. length input]
