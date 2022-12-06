@@ -1,17 +1,17 @@
 module Day06 where
-import Solution (Solution (Single), Answer)
+import Solution (Solution (Separate))
 import Data.List (nub)
 
-day06 :: Solution
-day06 = Single part1
+day06 = Separate
+    (solve 4)
+    (solve 14)
 
-part1 :: String -> Answer
-part1 input = show
-    $ markerPos
+solve count input = show
+    $ markerPos count
     $ zip input [0..length input]
 
-markerPos xs =
-    let es = take 4 $ map fst xs
+markerPos count xs =
+    let es = take count $ map fst xs
     in if nub es == es
-        then snd (head xs) + 4
-        else markerPos $ tail xs
+        then snd (head xs) + count
+        else markerPos count $ tail xs
