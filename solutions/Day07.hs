@@ -1,12 +1,13 @@
 module Day07 where
 
-import Solution (Solution (Single), Answer)
+import Solution (Solution (Separate), Answer)
 import Control.Monad.State ( evalState, MonadState(state), State )
 import ListUtils (startsWith)
 import NumUtils (readNumToEnd)
+import Data.List (sort)
 
 day07 :: Solution
-day07 = Single part1
+day07 = Separate part1 part2
 
 data Directory = Directory {
     dirName :: String,
@@ -22,14 +23,25 @@ part1 :: String -> Answer
 part1 input = show
     $ sum
     $ filter (<= 100000)
-    $ map getSize
+    $ getDirectorySizes input
+
+part2 :: String -> Answer
+part2 input = let
+    directorySizes = getDirectorySizes input
+    rootSize = head directorySizes
+    freeSpace = 70000000 - rootSize
+    requiredSpace = 30000000 - freeSpace
+    in show
+        $ minimum
+        $ filter (>= requiredSpace)
+          directorySizes
+
+getDirectorySizes :: String -> [Integer]
+getDirectorySizes input =
+      map getSize
     $ getSubDirs
     $ evalState readDir
     $ lines input
-
--- readLines :: State [String] [String]
--- readLines = state f
---     where f ls = ()
 
 readLine :: State [String] String
 readLine = state f
@@ -84,6 +96,5 @@ readSubDirs = do
 getSubDirs dir =
     dir : concatMap getSubDirs (subDirs dir)
 
-getSize :: Directory -> Integer
 getSize (Directory _ files subDirs) =
     sum (map (toInteger . size) files) + sum (map getSize subDirs)
