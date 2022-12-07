@@ -4,7 +4,8 @@ module ListUtils (
     chunk,
     intersectAll,
     modifyAt,
-    setAt
+    setAt,
+    startsWith
 ) where
 
 import Data.List (intersect)
@@ -49,3 +50,7 @@ modifyAt pos f xs = let
 -- replaced with a new value.
 setAt :: Int -> a -> [a] -> [a]
 setAt pos x = modifyAt pos (const x)
+
+-- | Returns whether a list starts with the elements of another list.
+startsWith :: Eq a => [a] -> [a] -> Bool
+startsWith xs pattern = take (length pattern) xs == pattern
