@@ -5,7 +5,8 @@ module ListUtils (
     intersectAll,
     modifyAt,
     setAt,
-    startsWith
+    startsWith,
+    valUnlessNull
 ) where
 
 import Data.List (intersect)
@@ -54,3 +55,10 @@ setAt pos x = modifyAt pos (const x)
 -- | Returns whether a list starts with the elements of another list.
 startsWith :: Eq a => [a] -> [a] -> Bool
 startsWith xs pattern = take (length pattern) xs == pattern
+
+-- | Returns a value if a list is not null, otherwise returns another.
+valUnlessNull :: b -> b -> [a] -> b
+valUnlessNull ifNotNull ifNull xs =
+    if null xs
+        then ifNull
+        else ifNotNull

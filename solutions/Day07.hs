@@ -1,10 +1,10 @@
 module Day07 where
 
 import Solution (Solution (Separate), Answer)
-import Control.Monad.State ( evalState, MonadState(state), State )
-import ListUtils (startsWith)
+import ListUtils (startsWith, valUnlessNull)
 import NumUtils (readNumToEnd)
 import Data.List (sort)
+import Control.Monad.State (evalState, MonadState(state), State)
 
 day07 :: Solution
 day07 = Separate part1 part2
@@ -21,9 +21,9 @@ data File = File {
 
 part1 :: String -> Answer
 part1 input = show
-    $ sum
-    $ filter (<= 100000)
-    $ getDirectorySizes input
+  $ sum
+  $ filter (<= 100000)
+  $ getDirectorySizes input
 
 part2 :: String -> Answer
 part2 input = let
@@ -32,28 +32,24 @@ part2 input = let
     freeSpace = 70000000 - rootSize
     requiredSpace = 30000000 - freeSpace
     in show
-        $ minimum
-        $ filter (>= requiredSpace)
-          directorySizes
+      $ minimum
+      $ filter (>= requiredSpace)
+        directorySizes
 
 getDirectorySizes :: String -> [Integer]
 getDirectorySizes input =
-      map getSize
-    $ getSubDirs
-    $ evalState readDir
-    $ lines input
+    map getSize
+  $ getSubDirs
+  $ evalState readDir
+  $ lines input
 
 readLine :: State [String] String
 readLine = state f
-    where f ls = if null ls
-            then ([], [])
-            else (head ls, tail ls)
+    where f ls = valUnlessNull (head ls, tail ls) ([], []) ls
 
 peekLine :: State [String] String
 peekLine = state f
-    where f ls = if null ls
-            then ([], [])
-            else (head ls, ls)
+    where f ls = valUnlessNull (head ls, ls) ([], []) ls
 
 readEntries :: State [String] [String]
 readEntries = state f
@@ -74,8 +70,8 @@ readDir = do
 
     entries <- readEntries
     let files =
-            map toFile $
-            filter (not . (`startsWith` "dir")) entries
+            map toFile
+          $ filter (not . (`startsWith` "dir")) entries
 
     subDirs <- readSubDirs
 
