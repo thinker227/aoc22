@@ -6,7 +6,8 @@ module ListUtils (
     modifyAt,
     setAt,
     startsWith,
-    valUnlessNull
+    valUnlessNull,
+    aheadTail
 ) where
 
 import Data.List (intersect)
@@ -62,3 +63,8 @@ valUnlessNull ifNotNull ifNull xs =
     if null xs
         then ifNull
         else ifNotNull
+
+-- | For every element of a list, returns a tuple containing
+-- the preceeding elements, the current element, and the proceeding elements.
+aheadTail :: [a] -> [([a], a, [a])]
+aheadTail xs = map (\i -> (take i xs, xs !! i, drop (i + 1) xs)) [0 .. length xs - 1]

@@ -9,6 +9,7 @@ import Day04
 import Day05
 import Day06
 import Day07
+import Day08
 
 days :: Map Int Solution
 days = fromList [
@@ -18,5 +19,6 @@ days = fromList [
     (4, day04),
     (5, day05),
     (6, day06),
-    (7, day07)
+    (7, day07),
+    (8, day08)
     ]
