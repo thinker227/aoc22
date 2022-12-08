@@ -7,7 +7,8 @@ module ListUtils (
     setAt,
     startsWith,
     valUnlessNull,
-    aheadTail
+    aheadTail,
+    columns
 ) where
 
 import Data.List (intersect)
@@ -68,3 +69,7 @@ valUnlessNull ifNotNull ifNull xs =
 -- the preceeding elements, the current element, and the proceeding elements.
 aheadTail :: [a] -> [([a], a, [a])]
 aheadTail xs = map (\i -> (take i xs, xs !! i, drop (i + 1) xs)) [0 .. length xs - 1]
+
+columns :: [[a]] -> [[a]]
+columns ([]:_) = []
+columns xs = map head xs : columns (map tail xs)
