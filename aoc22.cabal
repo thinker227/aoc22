@@ -18,6 +18,7 @@ library solutions
         Day06
         Day07
         Day08
+        Day09
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -36,7 +37,7 @@ library utility
         ListUtils
         StringUtils
         NumUtils
-        Grid
+        Position
 
     build-depends:
         base ^>=4.14.3.0,
