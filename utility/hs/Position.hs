@@ -47,3 +47,6 @@ toTuple (Pos x y) = (x, y)
 -- | Swaps the elements of a position.
 swap :: Pos a -> Pos a
 swap (Pos x y) = Pos y x
+
+zero :: Num a => Pos a
+zero = Pos 0 0
