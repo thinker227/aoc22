@@ -1,11 +1,12 @@
 module Day10 where
 
-import Solution (Solution(Single), Answer)
-import Control.Monad.State
+import Solution (Solution(Separate), Answer)
 import NumUtils (readNumToEnd)
+import ListUtils (chunk, join)
+import Control.Monad.State ( gets, modify, evalState, MonadState(state), State )
 
 day10 :: Solution
-day10 = Single part1
+day10 = Separate part1 part2
 
 data Exec = Exec {
     register :: Int,
@@ -18,8 +19,7 @@ data ExecState = ExecState {
 
 part1 :: String -> Answer
 part1 input = let
-    ops = lines input ++ ["noop"]
-    execs = evalState execAll (ExecState ops 1 1)
+    execs = getExecs input
     cycles = [20, 60, 100, 140, 180, 220]
     in show
     $ sum
@@ -27,6 +27,25 @@ part1 input = let
           (\(Exec reg cyc) -> reg * cyc)
         . (\x -> execs !! (x - 1)))
       cycles
+
+part2 :: String -> Answer 
+part2 input = ("\n" ++)
+    $ concat
+    $ join "\n"
+    $ chunk 40
+    $ map screenChar
+    $ init
+    $ getExecs input
+
+screenChar :: Exec -> Char
+screenChar (Exec reg cyc) =
+    if ((cyc - 1) `mod` 40) `elem` [reg - 1 .. reg + 1]
+    then '#'
+    else '.'
+
+getExecs :: String -> [Exec]
+getExecs input =
+    evalState execAll (ExecState (lines input ++ ["noop"]) 1 1)
 
 readLine :: State ExecState String
 readLine = state f

@@ -8,7 +8,8 @@ module ListUtils (
     startsWith,
     valUnlessNull,
     aheadTail,
-    columns
+    columns,
+    join
 ) where
 
 import Data.List (intersect)
@@ -73,3 +74,8 @@ aheadTail xs = map (\i -> (take i xs, xs !! i, drop (i + 1) xs)) [0 .. length xs
 columns :: [[a]] -> [[a]]
 columns ([]:_) = []
 columns xs = map head xs : columns (map tail xs)
+
+join :: a -> [a] -> [a]
+join _ [x] = [x]
+join sep (x:xs) = x : sep : join sep xs
+join _ _ = []
