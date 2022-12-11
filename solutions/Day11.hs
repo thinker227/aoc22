@@ -1,10 +1,11 @@
 module Day11 where
 
 import Solution(Solution(Single), Answer)
-import ListUtils (splitBy, setAt, modifyAt)
+import ListUtils (splitBy, setAt, modifyAt, for)
 import StringUtils (blank, trim)
 import NumUtils (readNum)
 import Data.Char (digitToInt)
+import Data.List (sort)
 
 day11 :: Solution
 day11 = Single part1
@@ -15,7 +16,8 @@ data Monkey = Monkey {
     op :: Operation,
     test :: Int,
     ifTrue :: Int,
-    ifFalse :: Int }
+    ifFalse :: Int,
+    inspections :: Int }
     deriving (Show)
 
 data Operation = Operation {
@@ -39,7 +41,13 @@ part1 input = let
         $ splitBy blank
         $ lines input
     in show
-    $ inspectAll ms
+    $ product
+    $ take 2
+    $ reverse
+    $ sort
+    $ map inspections
+    $ last
+    $ for inspectAll 20 ms
 
 parseMonkey :: [String] -> Monkey
 parseMonkey (l0:l1:l2:l3:l4:l5:_) = let
@@ -57,12 +65,16 @@ parseMonkey (l0:l1:l2:l3:l4:l5:_) = let
     test = readNum $ drop 21 l3
     ifTrue = readNum $ drop 29 l4
     ifFalse = readNum $ drop 30 l5
-    in Monkey monkeyNumber items (Operation operator value) test ifTrue ifFalse
+    in Monkey monkeyNumber items (Operation operator value) test ifTrue ifFalse 0
 parseMonkey _ = error "Malformed input"
 
+incrementInspections :: Monkey -> Monkey
+incrementInspections (Monkey monkeyNumber items op test ifTrue ifFalse inspections) =
+    Monkey monkeyNumber items op test ifTrue ifFalse (inspections + 1)
+
 updateItems :: ([Int] -> [Int]) -> Monkey -> Monkey
-updateItems f (Monkey monkeyNumber items op test ifTrue ifFalse) =
-    Monkey monkeyNumber (f items) op test ifTrue ifFalse
+updateItems f (Monkey monkeyNumber items op test ifTrue ifFalse inspections) =
+    Monkey monkeyNumber (f items) op test ifTrue ifFalse inspections
 
 addItems :: [Int] -> Monkey -> Monkey
 addItems xs = updateItems (++ xs)
@@ -104,7 +116,7 @@ inspectHeadItem m = let
     operation = op
     worryLevel = applyOperation (operation m) v `div` 3
     success = worryLevel `mod` test m == 0
-    newMonkey = removeHeadItem m
+    newMonkey = incrementInspections $ removeHeadItem m
     (true, false) = if success
         then ([worryLevel], [])
         else ([], [worryLevel])

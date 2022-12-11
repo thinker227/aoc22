@@ -9,7 +9,8 @@ module ListUtils (
     valUnlessNull,
     aheadTail,
     columns,
-    join
+    join,
+    for
 ) where
 
 import Data.List (intersect)
@@ -79,3 +80,14 @@ join :: a -> [a] -> [a]
 join _ [x] = [x]
 join sep (x:xs) = x : sep : join sep xs
 join _ _ = []
+
+-- | Returns a list which is the result of applying a function
+-- to the preceeding element a specific amount of times.
+for :: (a -> a) -> Int ->  a -> [a]
+for f max x = for' 0 x max f
+
+for' :: Int -> a -> Int -> (a -> a) -> [a]
+for' i x max f = if i >= max
+    then []
+    else let x' = f x
+        in x' : for' (i + 1) x' max f
