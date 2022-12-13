@@ -16,9 +16,24 @@ data Item
 
 part1 :: String -> Answer
 part1 input = show
-    $ map ((\[a, b] -> (a, b)) . map (evalState parseList))
+    $ map (
+        uncurry ordered
+      . (\[a, b] -> (a, b))
+      . map (evalState parseList))
     $ splitBy blank
     $ lines input
+
+ordered :: [Item] -> [Item] -> Bool
+ordered [] [] = True
+ordered [] _ = True  -- Left ran out of items
+ordered _ [] = False -- Right ran out of items
+ordered (l:ls) (r:rs) = compareItems l r && ordered ls rs
+
+compareItems :: Item -> Item -> Bool
+compareItems (Value l) (Value r) = l <= r
+compareItems (SubList l) (SubList r) = ordered l r
+compareItems l (SubList r) = ordered [l] r
+compareItems (SubList l) r = ordered l [r]
 
 parseList :: State String [Item]
 parseList = do
