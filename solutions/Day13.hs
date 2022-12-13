@@ -14,19 +14,13 @@ data Item
     | SubList { values :: [Item] }
     deriving (Eq)
 
-data Compare
-    = Ordered
-    | Unordered
-    | Continue
-    deriving (Eq)
-
 part1 input = show
     $ sum
     $ map fst
     $ filter snd
     $ zip [1..]
     $ map (
-        (== Ordered)
+        (== LT)
       . uncurry ordered
       . (\[a, b] -> (a, b))
       . map (evalState parseList))
@@ -38,7 +32,7 @@ part2 input = show
     $ map fst
     $ filter ((`elem` drivers) . snd)
     $ zip [1..]
-    $ sortBy (\l r -> if ordered l r == Ordered then LT else GT)
+    $ sortBy ordered
     $ (++ drivers)
     $ concatMap (map (evalState parseList))
     $ splitBy blank
@@ -46,19 +40,16 @@ part2 input = show
 
 drivers = [[SubList [Value 2]], [SubList [Value 6]]]
 
-ordered [] [] = Continue -- Undefined behavior
-ordered [] _ = Ordered   -- Left ran out of items
-ordered _ [] = Unordered -- Right ran out of items
+ordered [] [] = EQ -- Undefined behavior
+ordered [] _ = LT   -- Left ran out of items
+ordered _ [] = GT -- Right ran out of items
 ordered (l:ls) (r:rs) =
     let c = compareItems l r
-    in if c == Continue
+    in if c == EQ
         then ordered ls rs
         else c
 
-compareItems (Value l) (Value r) = case compare l r of
-    LT -> Ordered
-    EQ -> Continue
-    GT -> Unordered
+compareItems (Value l) (Value r) = compare l r
 compareItems (SubList l) (SubList r) = ordered l r
 compareItems l (SubList r) = ordered [l] r
 compareItems (SubList l) r = ordered l [r]
