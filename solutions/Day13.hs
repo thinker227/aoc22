@@ -1,10 +1,10 @@
-module Day13 where
+module Day13 (day13) where
 
 import Solution(Solution(Single), Answer)
 import ListUtils (splitBy)
 import StringUtils (blank)
-import StateUtils
-import Control.Monad.State (State, evalState, MonadState (get), gets)
+import StateUtils (peekHead, readInt, while, consume)
+import Control.Monad.State (State, evalState, gets)
 
 day13 :: Solution
 day13 = Single part1
@@ -14,23 +14,41 @@ data Item
     | SubList { values :: [Item] }
     deriving (Show)
 
+data Compare
+    = Ordered
+    | Unordered
+    | Continue
+    deriving (Eq, Show)
+
 part1 :: String -> Answer
 part1 input = show
+    $ sum
+    $ map fst
+    $ filter snd
+    $ zip [1..]
     $ map (
-        uncurry ordered
+        (== Ordered)
+      . uncurry ordered
       . (\[a, b] -> (a, b))
       . map (evalState parseList))
     $ splitBy blank
     $ lines input
 
-ordered :: [Item] -> [Item] -> Bool
-ordered [] [] = True
-ordered [] _ = True  -- Left ran out of items
-ordered _ [] = False -- Right ran out of items
-ordered (l:ls) (r:rs) = compareItems l r && ordered ls rs
+ordered :: [Item] -> [Item] -> Compare
+ordered [] [] = Continue
+ordered [] _ = Ordered  -- Left ran out of items
+ordered _ [] = Unordered -- Right ran out of items
+ordered (l:ls) (r:rs) =
+    let c = compareItems l r
+    in if c == Continue
+        then ordered ls rs
+        else c
 
-compareItems :: Item -> Item -> Bool
-compareItems (Value l) (Value r) = l <= r
+compareItems :: Item -> Item -> Compare
+compareItems (Value l) (Value r) = case compare l r of
+    LT -> Ordered
+    EQ -> Continue
+    GT -> Unordered
 compareItems (SubList l) (SubList r) = ordered l r
 compareItems l (SubList r) = ordered [l] r
 compareItems (SubList l) r = ordered l [r]
