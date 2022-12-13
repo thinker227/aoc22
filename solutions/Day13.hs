@@ -1,24 +1,25 @@
 module Day13 (day13) where
 
-import Solution(Solution(Single), Answer)
-import ListUtils (splitBy)
+import Solution(Solution(Separate), Answer)
+import ListUtils (splitBy, join)
 import StringUtils (blank)
 import StateUtils (peekHead, readInt, while, consume)
 import Control.Monad.State (State, evalState, gets)
+import Data.List (sortBy)
 
 day13 :: Solution
-day13 = Single part1
+day13 = Separate part1 part2
 
 data Item
     = Value { value :: Int }
     | SubList { values :: [Item] }
-    deriving (Show)
+    deriving (Eq)
 
 data Compare
     = Ordered
     | Unordered
     | Continue
-    deriving (Eq, Show)
+    deriving (Eq)
 
 part1 :: String -> Answer
 part1 input = show
@@ -33,6 +34,21 @@ part1 input = show
       . map (evalState parseList))
     $ splitBy blank
     $ lines input
+
+part2 :: String -> Answer
+part2 input = show
+    $ product
+    $ map fst
+    $ filter ((`elem` drivers) . snd)
+    $ zip [1..]
+    $ sortBy (\l r -> if ordered l r == Ordered then LT else GT)
+    $ (++ drivers)
+    $ concatMap (map (evalState parseList))
+    $ splitBy blank
+    $ lines input
+
+drivers :: [[Item]]
+drivers = [[SubList [Value 2]], [SubList [Value 6]]]
 
 ordered :: [Item] -> [Item] -> Compare
 ordered [] [] = Continue
