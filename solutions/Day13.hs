@@ -41,8 +41,8 @@ part2 input = show
 drivers = [[SubList [Value 2]], [SubList [Value 6]]]
 
 ordered [] [] = EQ -- Undefined behavior
-ordered [] _ = LT   -- Left ran out of items
-ordered _ [] = GT -- Right ran out of items
+ordered [] _ = LT  -- Left ran out of items
+ordered _ [] = GT  -- Right ran out of items
 ordered (l:ls) (r:rs) =
     let c = compareItems l r
     in if c == EQ
