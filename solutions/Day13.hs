@@ -1,13 +1,12 @@
 module Day13 (day13) where
 
-import Solution(Solution(Separate), Answer)
-import ListUtils (splitBy, join)
+import Solution(Solution(Separate))
+import ListUtils (splitBy)
 import StringUtils (blank)
 import StateUtils (peekHead, readInt, while, consume)
-import Control.Monad.State (State, evalState, gets)
 import Data.List (sortBy)
+import Control.Monad.State (State, evalState, gets)
 
-day13 :: Solution
 day13 = Separate part1 part2
 
 data Item
@@ -21,7 +20,6 @@ data Compare
     | Continue
     deriving (Eq)
 
-part1 :: String -> Answer
 part1 input = show
     $ sum
     $ map fst
@@ -35,7 +33,6 @@ part1 input = show
     $ splitBy blank
     $ lines input
 
-part2 :: String -> Answer
 part2 input = show
     $ product
     $ map fst
@@ -47,12 +44,10 @@ part2 input = show
     $ splitBy blank
     $ lines input
 
-drivers :: [[Item]]
 drivers = [[SubList [Value 2]], [SubList [Value 6]]]
 
-ordered :: [Item] -> [Item] -> Compare
-ordered [] [] = Continue
-ordered [] _ = Ordered  -- Left ran out of items
+ordered [] [] = Continue -- Undefined behavior
+ordered [] _ = Ordered   -- Left ran out of items
 ordered _ [] = Unordered -- Right ran out of items
 ordered (l:ls) (r:rs) =
     let c = compareItems l r
@@ -60,7 +55,6 @@ ordered (l:ls) (r:rs) =
         then ordered ls rs
         else c
 
-compareItems :: Item -> Item -> Compare
 compareItems (Value l) (Value r) = case compare l r of
     LT -> Ordered
     EQ -> Continue
