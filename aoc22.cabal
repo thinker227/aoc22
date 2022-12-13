@@ -21,6 +21,7 @@ library solutions
         Day09
         Day10
         Day11
+        Day13
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -40,10 +41,12 @@ library utility
         StringUtils
         NumUtils
         Position
+        StateUtils
 
     build-depends:
         base ^>=4.14.3.0,
-        containers
+        containers,
+        mtl
     hs-source-dirs:   utility/hs
     default-language: Haskell2010
 
