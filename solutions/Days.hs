@@ -14,6 +14,7 @@ import Day09
 import Day10
 import Day11
 import Day13
+import Day14
 
 days :: Map Int Solution
 days = fromList [
@@ -28,5 +29,6 @@ days = fromList [
     (9, day09),
     (10, day10),
     (11, day11),
-    (13, day13)
+    (13, day13),
+    (14, day14)
     ]

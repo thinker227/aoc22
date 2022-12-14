@@ -36,6 +36,11 @@ instance Num a => Num (Pos a) where
 posCombine :: (a -> b -> c) -> Pos a -> Pos b -> Pos c
 posCombine f (Pos x1 y1) (Pos x2 y2) = Pos (f x1 x2) (f y1 y2)
 
+-- | Applies a function to the elements of a position
+-- and returns the result.
+posJoin :: (a -> a -> b) -> Pos a -> b
+posJoin f (Pos x y) = f x y
+
 -- | Constructs a position from a tuple.
 fromTuple :: (a, a) -> Pos a
 fromTuple (x, y) = Pos x y

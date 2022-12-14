@@ -1,7 +1,9 @@
 module ListUtils (
     splitBy,
+    splitByMany,
     splitHalf,
     chunk,
+    view,
     intersectAll,
     modifyAt,
     setAt,
@@ -10,7 +12,9 @@ module ListUtils (
     aheadTail,
     columns,
     join,
-    for
+    for,
+    first,
+    firstOrNothing
 ) where
 
 import Data.List (intersect)
@@ -27,6 +31,22 @@ splitBy' f (x:xs) l accum = if f x
     else splitBy' f xs l (accum ++ [x])
 splitBy' _ _ l accum = l ++ [accum]
 
+-- | Splits a list by a sublist.
+-- Sequences of elements matching the sublist will act as separators
+-- and will be discarded.
+splitByMany :: Eq a => [a] -> [a] -> [[a]]
+splitByMany f xs = splitByMany' f xs [] []
+
+splitByMany' :: Eq a => [a] -> [a] -> [[a]] -> [a] -> [[a]]
+splitByMany' [] xs _ _ = map (: []) xs
+splitByMany' _ [] l accum = l ++ [accum]
+splitByMany' e xs l accum = let
+    len = length e
+    es = take len xs
+    in if es == e
+        then splitByMany' e (drop len xs) (l ++ [accum]) []
+        else splitByMany' e (tail xs) l (accum ++ [head xs])
+
 -- | Splits a list into two equal lists.
 splitHalf :: [a] -> ([a], [a])
 splitHalf xs = splitAt (length xs `div` 2) xs
@@ -37,6 +57,15 @@ splitHalf xs = splitAt (length xs `div` 2) xs
 chunk :: Int -> [a] -> [[a]]
 chunk _ [] = []
 chunk len xs = take len xs : chunk len (drop len xs)
+
+-- | Produces a list of sublists, each of which is
+-- exactly a specified length and represents a sequential
+-- view over the source list.
+view :: Int -> [a] -> [[a]]
+view _ [] = []
+view len xs = if length xs >= len
+    then take len xs : view len (tail xs)
+    else []
 
 -- | Intersects all lists in a list.
 intersectAll :: Eq a => [[a]] -> [a]
@@ -91,3 +120,13 @@ for' i x max f = if i >= max
     then []
     else let x' = f x
         in x' : for' (i + 1) x' max f
+
+-- | Returns the first element of a list which matches a predicate.
+first :: (a -> Bool) -> [a] -> a
+first f = head . filter f
+
+firstOrNothing :: (a -> Bool) -> [a] -> Maybe a
+firstOrNothing _ [] = Nothing
+firstOrNothing f (x:xs) = if f x
+    then Just x
+    else firstOrNothing f xs
