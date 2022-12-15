@@ -43,7 +43,8 @@ library utility
         StringUtils
         NumUtils
         Position
-        StateUtils
+        StateUtils,
+        RangeUtils
 
     build-depends:
         base ^>=4.14.3.0,
