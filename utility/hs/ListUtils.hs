@@ -14,7 +14,8 @@ module ListUtils (
     join,
     for,
     first,
-    firstOrNothing
+    firstOrNothing,
+    remove
 ) where
 
 import Data.List (intersect)
@@ -130,3 +131,7 @@ firstOrNothing _ [] = Nothing
 firstOrNothing f (x:xs) = if f x
     then Just x
     else firstOrNothing f xs
+
+-- | `remove a b` removes all elements of `b` that occur in `a`.
+remove :: Eq a => [a] -> [a] -> [a]
+remove a = filter (`notElem` a)
