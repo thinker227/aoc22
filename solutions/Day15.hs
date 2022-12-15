@@ -17,9 +17,11 @@ data Sensor = Sensor {
 
 part1 y input = let
     sensors = map (evalState parse) (lines input)
+    beacons = nub (map beacon sensors)
+    beaconsAtY = filter ((== y) . ypos) beacons
     in show
+    $ (\x -> x - length beaconsAtY)
     $ length
-    $ remove (map beacon sensors)
     $ nub
     $ concatMap (`cellsAtY` y)
       sensors
