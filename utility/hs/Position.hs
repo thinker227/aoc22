@@ -1,4 +1,9 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Position where
+
+import GHC.Generics(Generic)
+import Data.Hashable(Hashable (hash, hashWithSalt))
 
 -- | A position of two values.
 data Pos a = Pos {
@@ -6,6 +11,7 @@ data Pos a = Pos {
     xpos :: a,
     -- | Gets the y position.
     ypos :: a }
+    deriving (Generic)
 
 instance Eq a => Eq (Pos a) where
     (==) (Pos x1 y1) (Pos x2 y2) = x1 == x2 && y1 == y2
@@ -30,6 +36,9 @@ instance Num a => Num (Pos a) where
     abs = fmap abs
     signum = fmap signum
     fromInteger v = pure (fromInteger v)
+
+instance Hashable a => Hashable (Pos a) where
+    hash (Pos x y) = hash x `hashWithSalt` y
 
 -- | Constructs a new position by applying a function
 -- to the elements of two other positions.
