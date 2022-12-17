@@ -24,6 +24,7 @@ library solutions
         Day13
         Day14
         Day15
+        Day17
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -46,7 +47,8 @@ library utility
         NumUtils
         Position
         StateUtils,
-        RangeUtils
+        RangeUtils,
+        HashSetUtils
 
     build-depends:
         base ^>=4.14.3.0,
